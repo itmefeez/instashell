@@ -213,3 +213,5 @@ case "$1" in --resume) resume ;; *)
 start
 bruteforcer
 esac
+thelinuxchoice/instashell
+cd instashell
